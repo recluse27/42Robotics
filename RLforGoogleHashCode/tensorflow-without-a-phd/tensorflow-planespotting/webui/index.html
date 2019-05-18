@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2018 Google LLC
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Plane spotting</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="shortcut icon" type="image/ico" href="favicon.jpg" />
+
+    <!-- application scripts, need DOM ready -->
+    <script defer src="globals.js"></script>
+    <script defer src="canvas.js"></script>
+    <script defer src="dash.js"></script>
+    <script defer src="dragscroll.js"></script>
+
+    <!-- Google API scripts -->
+    <script defer src="googleapiaccess.js"></script>
+    <!-- This Google Maps API key is restricted to http://localhost:8000/*
+     Get your own API key if deploying publicly-->
+    <script defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCS9dHO2mN7iHFnWCUQAQF5Oh_8rItiQoM&libraries=visualization,geometry&callback=initMap"></script>
+    <script defer src="https://apis.google.com/js/api.js?onload=handleClientLoad"></script>
+
+</head>
+
+<body>
+    <div id="container">
+        <div id="dashboard">
+            <div class="uiblock" >
+                <div class="title">ML Engine</div>
+                <form name="signinUI">
+                    <input name="authorize" type="submit" value="Authorize" />
+                    <input name="signout" type="hidden" value="Sign Out" />
+                </form>
+            </div>
+            <div class="uiblock">
+                <div class="title">Map capture</div>
+                <form name="airsel">
+                    <select name="sel" onchange="centerMapOnCode(document.airsel.sel.value)">
+                        <option value="">--> to airport on Google Maps</option>
+                        <option value="TLS">TLS Toulouse-Blagnac</option>
+                        <option value="LAX">LAX Los Angeles</option>
+                        <option value="SFO">SFO San Francisco</option>
+                        <option value="SFO2">SFO San Francisco 2</option>
+                        <option value="CDG">CDG Paris Roissy</option>
+                        <option value="CDG2">CDG Paris Roissy 2</option>
+                        <option value="LBG">LBG Paris Le Bourget</option>
+                        <option value="LBG2">LBG Paris Le Bourget 2</option>
+                        <option value="SEA">SEA Seattle Tacoma</option>
+                        <option value="SEA2">SEA Seattle Tacoma 2</option>
+                        <option value="NRT">NRT Tokyo Narita</option>
+                        <option value="ICN">ICN Seoul Incheon</option>
+                        <option value="DMA">DMA Davis Mothan Boneyard</option>
+                    </select>
+                </form>
+                <canvas id="cap"></canvas>
+            </div>
+            <div class="uiblock">
+                <div class="title">ML Engine REST call</div>
+                <form name="modsel"">
+                    <input id="analyze" type="hidden" value="Analyze" autofocus>
+                    <div class="console" id="sap"></div>
+                    <select name="model" style="visibility:hidden">
+                        <!-- pre-deployed models here
+                        <option value="my_project/my_model/my_version">Good model</option> -->
+                    </select>
+                </form>
+                <form name="addyourown">
+                    <input name="model" type="hidden" placeholder="project/model/version" />
+                    <input name="button" type="submit" value="+add your own model" />
+                </form>
+           </div>
+
+           <div class="uiblock">
+               <div class="title">JSON</div>
+               <div class="console" id="jap"></div>
+           </div>
+       </div>
+       <div id="map"></div>
+       <div id="imgmap" class="drag-scrollable"></div>
+       <div id="zoomctrl">
+           <div onclick="zoomIn()">+</div>
+           <div onclick="zoomOut()">-</div>
+       </div>
+       <div id="zone-container"><div id="zone"></div></div></div>
+   </div>
+</body>
+
+</html>
